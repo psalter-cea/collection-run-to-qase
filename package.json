@@ -1,0 +1,26 @@
+{
+    "name": "generate_test_run",
+    "version": "1.0.0",
+    "description": "A Postman test result reporter that uploads results to Qase test management.",
+    "main": "generate_test_run.js",
+    "type": "module",
+    "scripts": {
+      "start": "node generate_test_run.js",
+      "report": "node generate_test_run.js"
+    },
+    "bin": {
+      "qase-report": "./generate_test_run.js"
+    },
+    "keywords": [
+      "qase",
+      "postman",
+      "test-reporter",
+      "api-testing"
+    ],
+    "author": "Your Name or Org",
+    "license": "MIT",
+    "dependencies": {
+      "axios": "^1.6.0",
+      "dotenv": "^16.3.1"
+    }
+  }
