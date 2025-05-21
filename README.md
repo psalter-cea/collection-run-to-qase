@@ -1,0 +1,1 @@
+# qase-postman-reporter
