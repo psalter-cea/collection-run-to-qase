@@ -1,8 +1,10 @@
 // postman-to-qase.js
 
-import 'dotenv/config';
-const fs = require("fs");
-const axios = require("axios");
+import fs from 'fs';
+import dotenv from 'dotenv';
+import axios from 'axios';
+
+dotenv.config();
 
 // --- Load config from environment variables ---
 const QASE_API_TOKEN = process.env.QASE_API_TOKEN;
