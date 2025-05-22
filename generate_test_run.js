@@ -55,7 +55,6 @@ async function submitResults(runId, executions) {
 
     const qaseSteps = await getCaseSteps(caseId);
     const stepsQase = qaseSteps.map((step, index) => {
-      console.log(step);
       // Try to find a matching assertion by name
       const assertion = exec.assertions.find(a => a.name === step.expected_result);
 
@@ -66,8 +65,6 @@ async function submitResults(runId, executions) {
         status: assertion ? (assertion.error ? "failed" : "passed") : "failed"
       };
     });
-    console.log("stepsQase");
-    console.log(stepsQase);
     // Check if the there is a failed test
     const passed = exec.assertions.every(a => !a.error);
     const comment = exec.assertions.map(a =>
