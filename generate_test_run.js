@@ -71,13 +71,6 @@ async function submitResults(runId, executions) {
       a.error ? `❌ ${a.name}: ${a.error.message}` : `✅ ${a.name}`
     ).join("\n");
 
-    const steps = exec.assertions.map((a, index) => ({
-      position: index + 1,
-      action: a.name,
-      expected_result: "Assertion should pass",
-      status: a.error ? "failed" : "passed"
-    }));
-
     await axios.post(
       `https://api.qase.io/v1/result/${QASE_PROJECT_CODE}/${runId}`,
       {
