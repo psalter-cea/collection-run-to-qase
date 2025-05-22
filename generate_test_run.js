@@ -1,6 +1,6 @@
 // postman-to-qase.js
 
-require('dotenv').config();
+import 'dotenv/config';
 const fs = require("fs");
 const axios = require("axios");
 
