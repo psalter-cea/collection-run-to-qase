@@ -10,7 +10,7 @@ dotenv.config();
 const QASE_API_TOKEN = process.env.QASE_API_TOKEN;
 const QASE_PROJECT_CODE = process.env.QASE_PROJECT_CODE;
 const REPORT_FILE = process.env.POSTMAN_JSON_REPORT || "results.json";
-
+const test_run_tag = process.env.QASE_TEST_RUN_TAG || "Local Run";
 if (!QASE_API_TOKEN || !QASE_PROJECT_CODE) {
   console.error("❌ Missing QASE_API_TOKEN or QASE_PROJECT_CODE in environment variables.");
   process.exit(1);
@@ -34,7 +34,7 @@ async function createTestRun(caseIds) {
   const response = await axios.post(
     `https://api.qase.io/v1/run/${QASE_PROJECT_CODE}`,
     {
-      title: `Postman Run - ${new Date().toLocaleString()}`,
+      title: test_run_tag,
       cases: caseIds,
     },
     {
