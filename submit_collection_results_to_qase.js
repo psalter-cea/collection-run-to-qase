@@ -1,4 +1,8 @@
-// postman-to-qase.js
+/**
+ * This script submits Postman collection test results to QASE.
+ * It reads a Postman JSON report, extracts test case IDs, creates a test run in Qase,
+ * and submits the results for each test case.
+ */
 
 import fs from 'fs';
 import dotenv from 'dotenv';
@@ -112,7 +116,6 @@ function unescapeMarkdown(text) {
   try {
     const runId = await createTestRun(caseIds);
     await submitResults(runId, executions);
-    // await submitResults(123, executions);
     console.log("✅ Qase test run created and results submitted.");
   } catch (err) {
     console.error("❌ Error:", err.response?.data || err.message);
