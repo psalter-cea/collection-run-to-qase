@@ -56,7 +56,7 @@ async function submitResults(runId, executions) {
     const qaseSteps = await getCaseSteps(caseId);
     const stepsQase = qaseSteps.map((step, index) => {
       // Try to find a matching assertion by name
-      const assertion = exec.assertions.find(a => a.name === step.expected_result);
+      const assertion = exec.assertions.find(a => a.name === unescapeMarkdown(step.expected_result));
 
       return {
         position: step.position || index + 1,
@@ -66,16 +66,18 @@ async function submitResults(runId, executions) {
       };
     });
     // Check if the there is a failed test
-    const passed = exec.assertions.every(a => !a.error);
+    const failedChecker = stepsQase.every(a => a.status !== "failed");
+    const passed = failedChecker ? "passed" : "failed";
     const comment = exec.assertions.map(a =>
       a.error ? `❌ ${a.name}: ${a.error.message}` : `✅ ${a.name}`
     ).join("\n");
 
+    console.log("test: ", exec.name ," | Status:", passed);
     await axios.post(
       `https://api.qase.io/v1/result/${QASE_PROJECT_CODE}/${runId}`,
       {
         case_id: caseId,
-        status: passed ? "passed" : "failed",
+        status: passed,
         comment: comment,
         steps: stepsQase,
       },
@@ -98,6 +100,12 @@ async function getCaseSteps(caseId) {
     }
   );
   return response.data.result.steps || [];
+}
+
+function unescapeMarkdown(text) {
+  if (!text || typeof text !== 'string') return text;
+  // Unescape commonly escaped Markdown special characters
+  return text.replace(/\\([\\`*_{}[\]()#+\-.!])/g, '$1');
 }
 // --- Main execution ---
 (async () => {
