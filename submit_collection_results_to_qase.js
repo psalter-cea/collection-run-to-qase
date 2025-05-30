@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * This script submits Postman collection test results to QASE.
  * It reads a Postman JSON report, extracts test case IDs, creates a test run in Qase,
