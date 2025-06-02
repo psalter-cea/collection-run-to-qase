@@ -52,6 +52,7 @@ async function createTestRun(caseIds) {
 
 // --- Submit results to Qase ---
 async function submitResults(runId, executions) {
+  var tc_results = [];
   for (const exec of executions) {
     const match = exec.name.match(/Qase:(\d+)/);
     if (!match) continue;
@@ -77,21 +78,25 @@ async function submitResults(runId, executions) {
     ).join("\n");
 
     console.log("test: ", exec.name ," | Status:", passed);
-    await axios.post(
-      `https://api.qase.io/v1/result/${QASE_PROJECT_CODE}/${runId}`,
-      {
-        case_id: caseId,
-        status: passed,
-        comment: comment,
-        steps: stepsQase,
-      },
-      {
-        headers: {
-          Token: QASE_API_TOKEN,
-        },
-      }
-    );
+    tc_results.push({
+      case_id: caseId,
+      status: passed,
+      comment: comment,
+      steps: stepsQase,
+    });
   }
+  console.log("Submitting results to Qase...");
+  const response = await axios.post(
+    `https://api.qase.io/v1/result/${QASE_PROJECT_CODE}/${runId}`,
+    {
+      results: tc_results,
+    },
+    {
+      headers: {
+        Token: QASE_API_TOKEN,
+      },
+    }
+  );
 }
 // --- Fetch Qase case steps ---
 async function getCaseSteps(caseId) {
