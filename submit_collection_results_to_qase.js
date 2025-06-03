@@ -66,13 +66,17 @@ async function submitResults(runId, executions) {
 
       return {
         position: step.position || index + 1,
-        action: step.action,
-        expected_result: step.expected_result || "Expected result",
-        status: assertion ? (assertion.error ? "failed" : "passed") : "failed"
+        data: {
+          action: step.action,
+          expected_result: step.expected_result || "Expected result",
+        },
+        execution: {
+          status: assertion ? (assertion.error ? "failed" : "passed") : "failed"
+        }
       };
     });
     // Check if the there is a failed test
-    const failedChecker = stepsQase.every(a => a.status !== "failed");
+    const failedChecker = stepsQase.every(a => a.execution.status !== "failed");
     const passed = failedChecker ? "passed" : "failed";
     const comment = exec.assertions.map(a =>
       a.error ? `❌ ${a.name}: ${a.error.message}` : `✅ ${a.name}`
@@ -80,15 +84,22 @@ async function submitResults(runId, executions) {
 
     console.log("test: ", exec.name ," | Status:", passed);
     tc_results.push({
-      case_id: caseId,
-      status: passed,
-      comment: comment,
+      title: exec.name,
+      testops_id: caseId,
+      // id: String(caseId),
+      execution: {
+        "status": passed,
+      },
+      fields: {
+        description : comment
+      },
       steps: stepsQase,
     });
   }
   console.log("Submitting results to Qase...");
+  // console.log(JSON.stringify(tc_results, null, 2));
   const response = await axios.post(
-    `https://api.qase.io/v1/result/${QASE_PROJECT_CODE}/${runId}`,
+    `https://api.qase.io/v2/${QASE_PROJECT_CODE}/run/${runId}/results`,
     {
       results: tc_results,
     },
