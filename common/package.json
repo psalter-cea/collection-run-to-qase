@@ -5,7 +5,7 @@
     "submit-collection-results-to-qase": "./common/submit_collection_results_to_qase.js"
   },
   "scripts": {
-    "generate": "node submit_collection_results_to_qase.js"
+    "generate": "node ./common/submit_collection_results_to_qase.js"
   },
   "dependencies": {
     "axios": "^1.6.7",
