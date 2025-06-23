@@ -8,13 +8,18 @@
 import fs from 'fs';
 import dotenv from 'dotenv';
 import axios from 'axios';
-
-dotenv.config();
-
+import path from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const envPath = path.resolve(__dirname, '../.env');
+dotenv.config({ path: envPath });
 // --- Load config from environment variables ---
 const QASE_API_TOKEN = process.env.QASE_API_TOKEN;
 const QASE_PROJECT_CODE = process.env.QASE_PROJECT_CODE;
 const REPORT_FILE = process.env.POSTMAN_JSON_REPORT || "results.json";
+const reportPath = path.resolve(__dirname, '..', REPORT_FILE);
+
 const test_run_tag = process.env.QASE_TEST_RUN_TAG || "Local Run";
 if (!QASE_API_TOKEN || !QASE_PROJECT_CODE) {
   console.error("❌ Missing QASE_API_TOKEN or QASE_PROJECT_CODE in environment variables.");
@@ -22,7 +27,8 @@ if (!QASE_API_TOKEN || !QASE_PROJECT_CODE) {
 }
 
 // --- Load and parse Postman JSON report ---
-const postmanResults = JSON.parse(fs.readFileSync(REPORT_FILE, "utf-8"));
+const postmanResults = JSON.parse(fs.readFileSync(reportPath, 'utf-8'));
+
 const executions = postmanResults.run.executions.map(e => ({
   name: e.requestExecuted.name,
   assertions: e.tests || []
@@ -109,6 +115,7 @@ async function submitResults(runId, executions) {
       },
     }
   );
+  console.log("Results submitted successfully:", response.data);
 }
 // --- Fetch Qase case steps ---
 async function getCaseSteps(caseId) {
