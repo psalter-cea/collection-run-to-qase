@@ -1,0 +1,8 @@
+{
+    "name": "my-cli-tool",
+    "version": "1.0.0",
+    "bin": {
+        "submit-collection-results-to-qase": "./submit_collection_results_to_qase.js"
+    },
+    "dependencies": {}
+  }
