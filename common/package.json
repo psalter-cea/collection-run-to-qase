@@ -2,10 +2,10 @@
   "name": "collection-results-to-qase",
   "version": "1.0.0",
   "bin": {
-    "submit-collection-results-to-qase": "./common/submit_collection_results_to_qase.js"
+    "submit-collection-results-to-qase": "./submit_collection_results_to_qase.js"
   },
   "scripts": {
-    "generate": "node ./common/submit_collection_results_to_qase.js"
+    "generate": "node submit_collection_results_to_qase.js"
   },
   "dependencies": {
     "axios": "^1.6.7",
