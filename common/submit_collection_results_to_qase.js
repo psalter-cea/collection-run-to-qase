@@ -36,7 +36,7 @@ const executions = postmanResults.run.executions.map(e => ({
 
 // --- Extract Qase Case IDs ---
 const caseIds = [...new Set(executions.map(exec => {
-  const match = exec.name.match(/Qase:(\d+)/);
+  const match = exec.name.match(/Qase:(\d+)/i);
   return match ? parseInt(match[1]) : null;
 }).filter(Boolean))];
 
@@ -61,7 +61,7 @@ async function createTestRun(caseIds) {
 async function submitResults(runId, executions) {
   var tc_results = [];
   for (const exec of executions) {
-    const match = exec.name.match(/Qase:(\d+)/);
+    const match = exec.name.match(/Qase:(\d+)/i);
     if (!match) continue;
     const caseId = parseInt(match[1]);
 
@@ -140,7 +140,7 @@ function unescapeMarkdown(text) {
   try {
     const runId = await createTestRun(caseIds);
     await submitResults(runId, executions);
-    console.log("✅ Qase test run created and results submitted.");
+    console.log("Qase test run created and results submitted.");
   } catch (err) {
     console.error("❌ Error:", err.response?.data || err.message);
     process.exit(1);
